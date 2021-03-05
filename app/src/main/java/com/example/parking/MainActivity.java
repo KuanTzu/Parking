@@ -1,5 +1,5 @@
 package com.example.parking;
-
+//加了個註解試試
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Application;
@@ -22,11 +22,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ListView lvShow=null;
-    private TextView idx_cpu,w_cpu,runTime_cpu,idx_gpu,w_gpu,runTime_gpu,file;
+    private TextView idx_cpu,w_cpu,runTime_cpu,idx_gpu,w_gpu,runTime_gpu,file,idx_tf,w_tf,runTime_tf;
     private List<String> csvFile = new ArrayList<String>();
     private String csvName="";
-    private Button CPU,GPU;
+    private Button CPU,GPU,tfLite;
     private RunDlc runDlc;
+    private TFLite tfL;
     private Application myApplication;
     //
     private ToWeb toWeb;
@@ -41,11 +42,16 @@ public class MainActivity extends AppCompatActivity {
         idx_gpu = findViewById(R.id.textView10);
         w_gpu = findViewById(R.id.textView8);
         runTime_gpu = findViewById(R.id.textView9);
+        idx_tf = findViewById(R.id.textView14);
+        w_tf = findViewById(R.id.textView15);
+        runTime_tf = findViewById(R.id.textView17);
         CPU = findViewById(R.id.button);
         GPU = findViewById(R.id.button2);
+        tfLite = findViewById(R.id.button3);
         file = findViewById(R.id.textView12);
         CPU.setEnabled(false);
         GPU.setEnabled(false);
+        tfLite.setEnabled(false);
 
         lvShow=(ListView)findViewById(R.id.listV);
         setFileName();
@@ -60,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 file.setText(csvName);
                 CPU.setEnabled(true);
                 GPU.setEnabled(true);
+                tfLite.setEnabled(true);
                 //view.setBackgroundColor(Color.rgb(255, 255, 148));
             }
         });
@@ -67,26 +74,36 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 runDlc = new RunDlc(myApplication,0);
-                runModel(csvName,runDlc);
+                runDLCModel(csvName,runDlc);
                 idx_cpu.setText(runDlc.getAns()+"");
                 w_cpu.setText(runDlc.getW()+"");
                 runTime_cpu.setText(runDlc.getTime()+" s");
                 //
-                toWeb = new ToWeb(runDlc.getAns());
-                toWeb.run();
+                //toWeb = new ToWeb(runDlc.getAns());
+                //toWeb.run();
             }
         });
         GPU.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 runDlc = new RunDlc(myApplication,1);
-                runModel(csvName,runDlc);
+                runDLCModel(csvName,runDlc);
                 idx_gpu.setText(runDlc.getAns()+"");
                 w_gpu.setText(runDlc.getW()+"");
                 runTime_gpu.setText(runDlc.getTime()+" s");
                 //
-                toWeb = new ToWeb(runDlc.getAns());
-                toWeb.run();
+                //toWeb = new ToWeb(runDlc.getAns());
+                //toWeb.run();
+            }
+        });
+        tfLite.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                tfL = new TFLite(myApplication);
+                runTFModel(csvName,tfL);
+                idx_tf.setText(tfL.getAns()+"");
+                w_tf.setText(tfL.getW()+"");
+                runTime_tf.setText(tfL.getTime()+" s");
             }
         });
     }
@@ -101,7 +118,17 @@ public class MainActivity extends AppCompatActivity {
             csvFile.add(files.listFiles()[i].getName());
         }
     }
-    private void runModel(String csvName,RunDlc runDlc){
+    private void runDLCModel(String csvName,RunDlc runDlc){
+        float[] csvList = getInput(csvName);
+        runDlc.classify(csvList);
+        //
+        //Log.d("tzu runTime", runDlc.getSupportedRuntimes().toString());
+    }
+    private void runTFModel(String csvName,TFLite tfL){
+        float[] csvList = getInput(csvName);
+        tfL.runTFlite(csvList);
+    }
+    private float[] getInput(String csvName){
         File file =new File(this.getExternalFilesDir(null)+"/data/"+csvName);
         InputStream inputStream = null;
         try {
@@ -111,11 +138,8 @@ public class MainActivity extends AppCompatActivity {
         }
         CSVFile csvFile = new CSVFile(inputStream);
         float[] csvList = csvFile.read();
-        /////////////////////////////////////////////////////////
 
-        runDlc.classify(csvList);
-        //
-        //Log.d("tzu runTime", runDlc.getSupportedRuntimes().toString());
+        return csvList;
     }
 
 }
