@@ -6,6 +6,8 @@ import android.util.Log;
 import com.example.parking.ml.Test2;
 
 import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.Interpreter;
+import org.tensorflow.lite.gpu.GpuDelegate;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
@@ -44,6 +46,9 @@ public class TFLite {
         } catch (IOException e) {
             // TODO Handle the exception
         }
+    }
+    public void runTFliteGPU(float[] csvList){
+
     }
     private int argmax(float[] array) {
         float max = array[0];
