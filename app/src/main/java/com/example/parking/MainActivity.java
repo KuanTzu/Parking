@@ -1,5 +1,4 @@
 package com.example.parking;
-//加了個註解試試
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Application;
@@ -28,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private Button CPU,GPU,tfLite;
     private RunDlc runDlc;
     private TFLite tfL;
+    private TFLiteGPU tfLGPU;
     private Application myApplication;
+    private CSVFile csv;
     //
     private ToWeb toWeb;
     @Override
@@ -104,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
                 idx_tf.setText(tfL.getAns()+"");
                 w_tf.setText(tfL.getW()+"");
                 runTime_tf.setText(tfL.getTime()+" s");
+
+                //tfLGPU = new TFLiteGPU(myApplication);
+                //runTFGPUModel(csvName,tfLGPU);
             }
         });
     }
@@ -119,27 +123,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void runDLCModel(String csvName,RunDlc runDlc){
-        float[] csvList = getInput(csvName);
+        csv = new CSVFile(myApplication);
+        float[] csvList = csv.getInput(csvName);
         runDlc.classify(csvList);
         //
         //Log.d("tzu runTime", runDlc.getSupportedRuntimes().toString());
     }
     private void runTFModel(String csvName,TFLite tfL){
-        float[] csvList = getInput(csvName);
+        csv = new CSVFile(myApplication);
+        float[] csvList = csv.getInput(csvName);
         tfL.runTFlite(csvList);
     }
-    private float[] getInput(String csvName){
-        File file =new File(this.getExternalFilesDir(null)+"/data/"+csvName);
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        CSVFile csvFile = new CSVFile(inputStream);
-        float[] csvList = csvFile.read();
-
-        return csvList;
+    private void runTFGPUModel(String csvName,TFLiteGPU tfLGPU){
+        csv = new CSVFile(myApplication);
+        float[] csvList = csv.getInput(csvName);
+        tfLGPU.RunTFLiteGPU(csvList);
     }
+
 
 }

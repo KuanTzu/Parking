@@ -6,17 +6,14 @@ import android.util.Log;
 import com.example.parking.ml.Test2;
 
 import org.tensorflow.lite.DataType;
-import org.tensorflow.lite.Interpreter;
-import org.tensorflow.lite.gpu.GpuDelegate;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
+import java.util.Arrays;
 
-public class TFLite {
+public class TFLite extends Model{
 
     private final Application application;
-    private float w,time;
-    private int idx;
     public TFLite(Application application){
         this.application = application;
     }
@@ -28,7 +25,6 @@ public class TFLite {
             // Creates inputs for reference.
             TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 26, 39, 1}, DataType.FLOAT32);
             inputFeature0.loadArray(csvList);
-
             long start = System.currentTimeMillis();
             // Runs model inference and gets result.
             Test2.Outputs outputs = model.process(inputFeature0);
@@ -47,31 +43,4 @@ public class TFLite {
             // TODO Handle the exception
         }
     }
-    public void runTFliteGPU(float[] csvList){
-
-    }
-    private int argmax(float[] array) {
-        float max = array[0];
-        int re = 0;
-        for (int i = 1; i < array.length; i++) {
-            if (array[i] > max) {
-                max = array[i];
-                re = i;
-            }
-        }
-        return re;
-    }
-    public float getW(){
-        return w;
-    }
-    public float getTime(){
-        return time;
-    }
-    public int getIdx(){
-        return idx;
-    }
-    public String getAns(){
-        return String.format("%06d",Integer.valueOf(Integer.toString(idx, 2)));
-    }
-
 }

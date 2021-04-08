@@ -18,14 +18,12 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class RunDlc {
+public class RunDlc extends Model{
 
     private NeuralNetwork mNeuralNetwork;
     final String mInputLayer;
     final String mOutputLayer;
     private final Application application;
-    private float w,time;
-    private int idx;
     private int rT=0;
 
     public RunDlc(Application application,int rT){
@@ -73,6 +71,7 @@ public class RunDlc {
         final Map<String, FloatTensor> inputs = new HashMap<>();
         inputs.put(mInputLayer, tensor);
 
+
         long start = System.currentTimeMillis();
         final Map<String, FloatTensor> outputs = mNeuralNetwork.execute(inputs);
         for (Map.Entry<String, FloatTensor> output : outputs.entrySet()) {
@@ -105,17 +104,6 @@ public class RunDlc {
         }
     }
 
-    private int argmax(float[] array) {
-        float max = array[0];
-        int re = 0;
-        for (int i = 1; i < array.length; i++) {
-            if (array[i] > max) {
-                max = array[i];
-                re = i;
-            }
-        }
-        return re;
-    }
     public List<NeuralNetwork.Runtime> getSupportedRuntimes() {
         final List<NeuralNetwork.Runtime> result = new LinkedList<>();
         final SNPE.NeuralNetworkBuilder builder = new SNPE.NeuralNetworkBuilder(application);
@@ -125,18 +113,6 @@ public class RunDlc {
             }
         }
         return result;
-    }
-    public float getW(){
-        return w;
-    }
-    public float getTime(){
-        return time;
-    }
-    public int getIdx(){
-        return idx;
-    }
-    public String getAns(){
-        return String.format("%06d",Integer.valueOf(Integer.toString(idx, 2)));
     }
 
 }
