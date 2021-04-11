@@ -18,7 +18,8 @@ public class TFLite extends Model{
         this.application = application;
     }
 
-    public void runTFlite(float[] csvList){
+    public void runModel(float[] csvList){
+        Log.d("TZU","TF-CPU");
         try {
             Test2 model = Test2.newInstance(application);
 
@@ -36,7 +37,7 @@ public class TFLite extends Model{
             idx = argmax(array);
             w = array[idx];
 
-            Log.d("20210305", idx+"_ "+w);
+            Log.d("TFlite", idx+"_ "+w);
             // Releases model resources if no longer used.
             model.close();
         } catch (IOException e) {

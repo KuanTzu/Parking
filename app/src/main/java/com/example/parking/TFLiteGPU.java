@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +39,8 @@ public class TFLiteGPU extends Model{
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
     }
 
-    public void RunTFLiteGPU(float[] InputBuffer){
+    public void runModel(float[] InputBuffer){
+        Log.d("TZU","TF-GPU");
         if(compatList.isDelegateSupportedOnThisDevice()){
             // if the device has a supported GPU, add the GPU delegate
             GpuDelegate.Options delegateOptions = compatList.getBestOptionsForThisDevice();
@@ -65,10 +65,14 @@ public class TFLiteGPU extends Model{
         Map<Integer, Object> outputMap = new HashMap<>();
         outputMap.put(0, outputScores);
         // Run the model.
+        long start = System.currentTimeMillis();
         tfLite.runForMultipleInputsOutputs(inputArray, outputMap);
+        long end = System.currentTimeMillis();
+        time = (float) ((end-start)/1000.);
+        idx = argmax(outputScores[0]);
+        w = outputScores[0][idx];
 
-        Log.d("output", Arrays.toString(outputScores[0]));
-        Log.d("output", argmax(outputScores[0])+"");
+        Log.d("TFlite_GPU", idx+"_ "+w);
     }
 
     private float[][][][] reshape(int[] size,float[] InputBuffer){
@@ -76,13 +80,9 @@ public class TFLiteGPU extends Model{
 
         for(int i = 0; i<size[1]; i++){
             for(int j = 0; j<size[2]; j++){
-                arr[0][i][j][0] = InputBuffer[i*39+j];
+                arr[0][i][j][0] = InputBuffer[i*size[2]+j];
             }
         }
-
-        Log.d("InputBuffer", Arrays.toString(InputBuffer));
-        Log.d("arr", Arrays.deepToString(arr));
-
         return arr;
     }
 

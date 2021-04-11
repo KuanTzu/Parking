@@ -1,6 +1,6 @@
 package com.example.parking;
 
-public class Model {
+public abstract class Model {
 
     public float w,time;
     public int idx;
@@ -28,4 +28,5 @@ public class Model {
         }
         return re;
     }
+    public abstract void runModel(float[] csvList);
 }

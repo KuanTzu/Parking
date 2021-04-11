@@ -32,6 +32,7 @@ public class RunDlc extends Model{
         //buildNetwork
         SNPE.NeuralNetworkBuilder builder = null;
         if(rT==0) {
+            Log.d("TZU","SNPE-CPU");
             try {
                 builder = new SNPE.NeuralNetworkBuilder(application)
                         .setRuntimeOrder(NeuralNetwork.Runtime.CPU)
@@ -41,6 +42,7 @@ public class RunDlc extends Model{
             }
         }
         if(rT==1) {
+            Log.d("TZU","SNPE-GPU");
             try {
                 builder = new SNPE.NeuralNetworkBuilder(application)
                         .setRuntimeOrder(NeuralNetwork.Runtime.GPU_FLOAT16)
@@ -60,7 +62,7 @@ public class RunDlc extends Model{
         mOutputLayer = outputNames.iterator().next();
     }
 
-    public List<String> classify(float[] csvList){
+    public void runModel(float[] csvList){
         final List<String> result = new ArrayList<String>();
 
         final FloatTensor tensor = mNeuralNetwork.createFloatTensor(
@@ -91,8 +93,6 @@ public class RunDlc extends Model{
         releaseTensors(inputs, outputs);
         long end = System.currentTimeMillis();
         time = (float) ((end-start)/1000.);
-
-        return result;
     }
 
 
