@@ -1,8 +1,6 @@
 package com.example.parking;
 
 import android.app.Application;
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private String[] btn;
     private String csvName;
     private Application application;
-    private int adapterPosition;
 
     public MyAdapter(String[] btn, Application application,String csvName){
         this.btn=btn;
@@ -42,6 +39,12 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         return btn.length;
     }
 
+    private float[] getCsvList(String csvName){
+        CSVFile csv = new CSVFile(application);
+        float[] csvList = csv.getInput(csvName);
+        return csvList;
+    }
+
     public class myVH extends RecyclerView.ViewHolder{
         TextView ans,weight,time;
         Button bt;
@@ -54,12 +57,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
     }
 
-    private float[] getCsvList(String csvName){
-        CSVFile csv = new CSVFile(application);
-        float[] csvList = csv.getInput(csvName);
-        return csvList;
-    }
-
+    //自訂BUTTON OnClickListener
     class  DynamicOnClickListener implements View.OnClickListener {
         Model model;
         RecyclerView.ViewHolder holder;

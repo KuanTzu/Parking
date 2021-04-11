@@ -32,18 +32,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         file = findViewById(R.id.textView12);
-
+        //files ListView
         lvShow=(ListView)findViewById(R.id.listV);
         setFileName();
         setAdapter();
-
-        myApplication = this.getApplication();
-
+        //model RecycleView
         RecyclerView rclv=findViewById(R.id.recycle);
         RecyclerView.LayoutManager rclvLM=new LinearLayoutManager(this);
         rclv.setLayoutManager(rclvLM);
 
-
+        myApplication = this.getApplication();
         lvShow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -9,7 +9,6 @@ import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class TFLite extends Model{
 
