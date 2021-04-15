@@ -5,4 +5,4 @@
 然後傳到http上顯示
 
 ## Demo
-<p align="center"><img src="Demo.PNG" width="640"\></p>
+<p align="center"><img src="Demo.png" width="640"\></p>
