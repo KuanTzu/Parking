@@ -6,8 +6,8 @@
 ## Parking
 使用CNN model判斷FMCW雷達獲得之Heat Map Data 並顯示停車格狀態在手機上。
 
-然後傳到http上顯示。
+然後傳到http上顯示。(此app為舊版)
 <p align="center"><img src="Demo_1.JPG" width="640"\></p>
 
-## Demo
+## Demo(此app為新版)
 <p align="center"><img src="Demo.png" width="640"\></p>
